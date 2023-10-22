@@ -30,5 +30,6 @@
     "FP_PDN_HOFFSET": 5,
     "SYNTH_PARAMETERS": [
         "width=16"
-    ]
+    ],
+    "USE_SYNLIG": true
 }
