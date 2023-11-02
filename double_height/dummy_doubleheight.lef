@@ -6,6 +6,7 @@ MACRO dummy_doubleheight
   CLASS CORE ;
   FOREIGN dummy_doubleheight ;
   ORIGIN 0.000 0.000 ;
+  SITE unithddbl ;
   SIZE 5.520 BY 5.440 ;
   PIN VPWR
     USE POWER ;
