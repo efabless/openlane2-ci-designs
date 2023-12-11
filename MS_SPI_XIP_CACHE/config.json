@@ -6,6 +6,6 @@
     ],
     "CLOCK_PORT": "HCLK",
     "CLOCK_PERIOD": 10,
-    "FP_IO_MODE": "matching",
-    "FP_CORE_UTIL": 70
+    "FP_IO_MODE": "annealing",
+    "FP_CORE_UTIL": 65
 }
