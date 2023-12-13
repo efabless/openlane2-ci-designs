@@ -29,6 +29,7 @@ example_flow.start(_force_run_dir=run_dir)
 
 wrapper_config = json.load(open("./src/openlane/user_project_wrapper/config.json"))
 wrapper_overrides = {
+    "BASE_SDC_FILE": "./base_user_project_wrapper.sdc",
     "MACROS": {
         "user_proj_example": {
             "gds": [
