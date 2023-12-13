@@ -7,7 +7,7 @@ from openlane.flows.classic import Classic
 DIRNAME = os.path.dirname(os.path.realpath(__file__))
 os.chdir(DIRNAME)
 example_config = json.load(open("./src/openlane/user_proj_example/config.json"))
-run_dir = "./run-user_proj_example"
+run_dir = "./runs/CI/user_proj_example"
 example_overrides = {
     "BASE_SDC_FILE": os.path.abspath("./base_user_proj_example.sdc"),
     "RUN_IRDROP_REPORT": False,
@@ -90,7 +90,7 @@ del wrapper_config["EXTRA_SPEFS"]
 del wrapper_config["EXTRA_LIBS"]
 del wrapper_config["EXTRA_LEFS"]
 del wrapper_config["VERILOG_FILES_BLACKBOX"]
-run_dir = "./run-user_project_wrapper"
+run_dir = "./runs/CI/user_project_wrapper"
 wrapper_flow = Classic(
     {
         **wrapper_config,
