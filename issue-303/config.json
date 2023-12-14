@@ -1,4 +1,5 @@
 {
+  "PDK_ROOT": "/home/work/runner/.volare",
   "FP_PADFRAME_CFG": null,
   "DIODE_CELL": "sky130_fd_sc_hd__diode_2/DIODE",
   "PRIMARY_SIGNOFF_TOOL": "magic",
