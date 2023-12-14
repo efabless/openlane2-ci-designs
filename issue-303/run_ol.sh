@@ -1,5 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 set -e
+cd $SCRIPT_DIR
 python3 -m openlane --version
 if [ "$?" != "0" ]; then
     echo "Failed to run 'python3 -m openlane --version'."
