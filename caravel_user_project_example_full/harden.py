@@ -12,9 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import json
 import os
+import json
 import click
+import shutil
+from openlane.common.misc import mkdirp
 
 from openlane.flows import Flow
 from openlane.config import Macro
@@ -22,10 +24,12 @@ from openlane.config import Macro
 __dir__ = os.path.dirname(os.path.realpath(__file__))
 
 
-@click.command()
+@click.command(context_settings={"ignore_unknown_options": True})
 @click.option("--pdk-root", type=click.Path(dir_okay=True, file_okay=False))
+@click.option("--run-tag", type=click.Path(dir_okay=True, file_okay=False))
 def main(
     pdk_root,
+    run_tag,
 ):
     TargetFlow = Flow.factory.get("Classic")
 
@@ -46,7 +50,7 @@ def main(
         pdk="sky130A",
         pdk_root=pdk_root,
     )
-    upe_state_out = upe_flow.start()
+    upe_state_out = upe_flow.start(tag=run_tag)
 
     user_proj_example = Macro.from_state(upe_state_out)
 
@@ -78,7 +82,12 @@ def main(
         pdk="sky130A",
         pdk_root=pdk_root,
     )
-    upw_flow.start()
+    upw_flow.start(tag=run_tag)
+    
+    runs_dir = os.path.join(__dir__, "runs")
+    run_dir_final = os.path.join(runs_dir, run_tag)
+    mkdirp(runs_dir)
+    shutil.copytree(upw_flow.run_dir, run_dir_final)
 
 
 main()
