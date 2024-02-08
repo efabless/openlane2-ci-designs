@@ -27,9 +27,11 @@ __dir__ = os.path.dirname(os.path.realpath(__file__))
 @click.command(context_settings={"ignore_unknown_options": True})
 @click.option("--pdk-root", type=click.Path(dir_okay=True, file_okay=False))
 @click.option("--run-tag", type=click.Path(dir_okay=True, file_okay=False))
+@click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def main(
     pdk_root,
     run_tag,
+    args,
 ):
     TargetFlow = Flow.factory.get("Classic")
 
