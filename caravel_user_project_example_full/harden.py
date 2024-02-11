@@ -55,11 +55,6 @@ def main(
     upe_state_out = upe_flow.start(tag=run_tag)
 
     user_proj_example = Macro.from_state(upe_state_out)
-
-    # TODO: Fix these hacks
-    user_proj_example.nl = [x.replace(".nl.v", ".pnl.v") for x in user_proj_example.nl]
-    user_proj_example.lib = []
-    
     user_proj_example.instantiate("mprj", (60, 15))
 
     upw_dir = os.path.join(__dir__, "src", "openlane", "user_project_wrapper")
