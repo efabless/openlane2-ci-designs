@@ -203,3 +203,7 @@ def main(
     )
 
     integration_flow.start(tag=os.path.join(run_tag, "integration"))
+
+
+if __name__ == "__main__":
+    main()
