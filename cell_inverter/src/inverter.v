@@ -16,13 +16,9 @@ module inverter (
 `ifdef PDK_sky130A 
     inout VPWR,
     inout VGND,
-    inout VPB,
-    inout VNB,
 `elsif PDK_gf180mcuD
     inout VDD,
     inout VSS,
-    inout VNW,
-    inout VPW,
 `endif
 `endif
     input wire in,
@@ -33,8 +29,8 @@ module inverter (
     `ifdef USE_POWER_PINS
         .VPWR(VPWR),
         .VGND(VGND),
-        .VPB(VPB),
-        .VNB(VNB),
+        .VPB(VPWR),
+        .VNB(VGND),
     `endif
         .Y(out),
         .A(in)
@@ -44,8 +40,8 @@ module inverter (
     `ifdef USE_POWER_PINS
         .VDD(VDD),
         .VSS(VSS),
-        .VNW(VNW),
-        .VPW(VPW),
+        .VNW(VDD),
+        .VPW(VSS),
     `endif
         .ZN(out),
         .I(in)
