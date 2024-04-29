@@ -120,6 +120,8 @@ def main(
             "FP_PDN_HSPACING": 3.2,
             "FP_MACRO_HORIZONTAL_HALO": 20,
             "FP_MACRO_VERTICAL_HALO": 20,
+            "VDD_PIN": "power",
+            "GND_PIN": "ground",
         },
         design_dir=__dir__,
         pdk="sky130A",
@@ -131,15 +133,39 @@ def main(
     # macro_state = State.loads(open(str(latest_file)).read())
 
     spm = Macro.from_state(macro_state)
-    spm.instantiate("spm_inst[0]", (150, 150))
-    spm.instantiate("spm_inst[1]", (300, 300))
+    spm.instantiate("spm_inst[0].inst", (150, 150))
+    spm.instantiate("spm_inst[1].inst", (300, 300))
 
     integration_v = ScopedFile(
         contents="""
+        module thin_wrapper(
+        `ifdef USE_POWER_PINS
+            inout vcc0,
+            inout vss0,
+        `endif
+            input clk,
+            input rst,
+            input x,
+            input[31:0] a,
+            output y 
+        );
+            spm inst(
+            `ifdef USE_POWER_PINS
+                .power(vcc0),
+                .ground(vss0),
+            `endif
+                .clk(clk),
+                .rst(rst),
+                .x(x),
+                .a(a),
+                .y(y)
+            );
+        endmodule
+        
         module dual_spm(
         `ifdef USE_POWER_PINS
-            inout VPWR,
-            inout VGND,
+            inout vcc0,
+            inout vss0,
         `endif
             input clk,
             input rstn,
@@ -150,10 +176,10 @@ def main(
             output y1,
             output y2
         );
-            spm spm_inst[1:0] (
+            thin_wrapper spm_inst[1:0] (
             `ifdef USE_POWER_PINS
-                .VPWR(VPWR),
-                .VGND(VGND),
+                .vcc0(vcc0),
+                .vss0(vss0),
             `endif
                 .clk(clk),
                 .rst(rstn),
@@ -192,6 +218,8 @@ def main(
             "RUN_KLAYOUT_DRC": False,
             "RUN_KLAYOUT_STREAMOUT": False,
             "RUN_KLAYOUT_XOR": False,
+            "VDD_PIN": "vcc0",
+            "GND_PIN": "vss0",
         },
         design_dir=__dir__,
         pdk="sky130A",
