@@ -30,10 +30,12 @@ __dir__ = os.path.dirname(os.path.abspath(__file__))
 @click.option(
     "--run-tag", type=click.Path(dir_okay=True, file_okay=False), required=True
 )
+@click.option("--macro-and-integration/--integration-only", type=bool, default=True)
 @click.argument("args", nargs=-1, type=click.UNPROCESSED)
 def main(
     pdk_root,
     run_tag,
+    macro_and_integration,
     args,
 ):
     Classic = Flow.factory.get("Classic")
@@ -128,13 +130,20 @@ def main(
         pdk_root=pdk_root,
     )
 
-    macro_state = macro_flow.start(tag=os.path.join(run_tag, "macro"), overwrite=True)
-    # latest_file = get_latest_file(f"{__dir__}/runs/{run_tag}/macro", "state_out.json")
-    # macro_state = State.loads(open(str(latest_file)).read())
+    if macro_and_integration:
+        macro_state = macro_flow.start(
+            tag=os.path.join(run_tag, "macro"), overwrite=True
+        )
+    else:
+        latest_file = get_latest_file(
+            f"{__dir__}/runs/{run_tag}/macro", "state_out.json"
+        )
+        macro_state = State.loads(open(str(latest_file)).read())
 
     spm = Macro.from_state(macro_state)
     spm.instantiate("spm_inst[0].inst", (150, 150))
     spm.instantiate("spm_inst[1].inst", (300, 300))
+    # spm.instantiate("spm_inst.inst", (150, 150))
 
     integration_v = ScopedFile(
         contents="""
@@ -187,6 +196,20 @@ def main(
                 .a({a1, a2}),
                 .y({y1, y2})
             );
+        /*
+            assign y2 = 1'b0;
+            thin_wrapper spm_inst (
+            `ifdef USE_POWER_PINS
+                .vcc0(vcc0),
+                .vss0(vss0),
+            `endif
+                .clk(clk),
+                .rst(rstn),
+                .x(x1),
+                .a(a1),
+                .y(y1)
+            );
+        */
         endmodule    
         """
     )
