@@ -15,5 +15,5 @@
             "FP_CORE_UTIL": 30
         }
     },
-    "DRT_ANTENNA_REPAIR": true
+    "DRT_ANTENNA_REPAIR_ITERS": 5
 }
